@@ -1,0 +1,9 @@
+div(class="example-form")
+  mat-form-field
+    input(matInput,
+          [(ngModel)]="user.userName",
+          (keyup)="updateUserNameObs(user.userName)",
+          name="user",
+          placeholder="User Name:")
+  div
+    span Value: {{ user.userName }}
