@@ -1,1 +1,4 @@
-p graph
+div
+  h4 {{ title }}
+  div(*ngFor="let data of parent")
+    app-bar-chart([child]="data")

@@ -15,7 +15,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.user = {
-      userName: 'test'
+      userName: 'User'
     };
     this.userService.updateUserName(this.user.userName);
   }

@@ -9,13 +9,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { MenuComponent } from './components/menu/menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCardModule, MatFormFieldModule, MatIconModule, MatInputModule, MatTabsModule} from '@angular/material';
+import { BarChartComponent } from './components/graph/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
     GraphComponent,
-    MenuComponent
+    MenuComponent,
+    BarChartComponent
   ],
   imports: [
     BrowserModule,
