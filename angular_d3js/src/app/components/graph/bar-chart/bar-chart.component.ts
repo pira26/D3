@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { AxisDomain, AxisScale } from 'd3';
 
 @Component({
   selector: 'app-bar-chart',
@@ -14,33 +15,46 @@ export class BarChartComponent implements OnInit {
   private width = 800;
   private height = 40;
 
-  constructor() { }
+  constructor(private el: ElementRef) { }
 
   ngOnInit() {
     this.createSVG();
   }
 
-  createSVG(): void {
-    const x = d3.scaleLinear()
-      .range([0, this.width]);
+  private createSVG(): void {
+    const svg = this.initSVG();
+    const x = this.generateXScale(svg);
+    const y = this.generateYScale(svg);
+    this.drawRectForBarChart(svg, x, y);
+    this.drawYAxis(svg, y);
+    this.writeBarChartTitle(svg);
+  }
 
-    const y = d3.scaleBand()
-      .range([this.height, 0])
-      .padding(0.5);
-
+  private initSVG(): any {
     // append a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    const svg = d3.select('.bar-chart-container')
-      .append('svg')
+    return d3.select(this.el.nativeElement)
+      .select('svg')
       .attr('width', this.width)
       .attr('height', this.height + 30)
       .append('g')
       .attr('transform', `translate(200, 20)`);
+  }
 
-    // Scale the range of the data in the domains
-    x.domain([0, +d3.max(this.child.value, (d: any) => d.price)]);
-    y.domain(this.child.value.map((d) => `${d.price} ${d.unit}`));
+  private generateXScale(svg: any): AxisScale<AxisDomain> {
+    return d3.scaleLinear()
+      .rangeRound([0, this.width])
+      .domain([0, +d3.max(this.child.value, (d: any) => d.price)]); // Scale the range of the data in the domains
+  }
 
+  private generateYScale(svg: any): AxisScale<AxisDomain> {
+    return d3.scaleBand()
+      .rangeRound([this.height, 0])
+      .padding(0.5)
+      .domain(this.child.value.map((d) => `${d.price} ${d.unit}`)); // Scale the range of the data in the domains
+  }
+
+  private drawRectForBarChart(svg: any, x: AxisScale<AxisDomain>, y: AxisScale<AxisDomain>): void {
     // append the rectangles for the bar chart
     svg.selectAll('rect')
       .data(this.child.value)
@@ -52,18 +66,9 @@ export class BarChartComponent implements OnInit {
       .attr('height', y.bandwidth())
       .attr('rx', 5)
       .style('fill', (d: any) => this.selectColor(d.name));
+  }
 
-    // add the x Axis
-    /*svg.append('g')
-      .attr('transform', `translate(0, ${height})`)
-      .call(d3.axisBottom(x));*/
-
-    // add the y Axis
-    svg.append('g')
-      .call(d3.axisLeft(y))
-      .select('.domain')
-      .remove();
-
+  private writeBarChartTitle(svg: any): void {
     svg.append('g')
       .append('text')
       .attr('width', 100)
@@ -72,7 +77,22 @@ export class BarChartComponent implements OnInit {
       .text(this.child.title);
   }
 
-  selectColor(valueName: string): string {
+  private drawYAxis(svg: any, y: AxisScale<AxisDomain>): void {
+    // add the y Axis
+    svg.append('g')
+      .call(d3.axisLeft(y))
+      .select('.domain')
+      .remove();
+  }
+
+  private drawXAxis(svg: any, x: AxisScale<AxisDomain>): void {
+    // add the x Axis
+    svg.append('g')
+      .attr('transform', `translate(0, ${this.height})`)
+      .call(d3.axisBottom(x));
+  }
+
+  private selectColor(valueName: string): string {
     let color;
     switch (valueName) {
       case 'Sud Habitat':
