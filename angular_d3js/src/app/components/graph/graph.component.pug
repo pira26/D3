@@ -1,4 +1,6 @@
 div
   h4 {{ title }}
-  div(*ngFor="let data of parent")
-    app-bar-chart([child]="data")
+  div(*ngIf="isData; else noData")
+    div(*ngFor="let data of parent")
+      app-bar-chart([child]="data")
+  ng-template(#noData="") There is no datas for your bar chart 😔

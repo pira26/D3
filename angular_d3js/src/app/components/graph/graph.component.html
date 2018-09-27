@@ -1,1 +1,1 @@
-<div><h4>{{ title }}</h4><div *ngFor="let data of parent"><app-bar-chart [child]="data"></app-bar-chart></div></div>
+<div><h4>{{ title }}</h4><div *ngIf="isData; else noData"><div *ngFor="let data of parent"><app-bar-chart [child]="data"></app-bar-chart></div></div><ng-template #noData="">There is no datas for your bar chart 😔</ng-template></div>

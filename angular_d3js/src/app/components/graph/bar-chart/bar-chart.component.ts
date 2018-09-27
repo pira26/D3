@@ -33,8 +33,8 @@ export class BarChartComponent implements OnInit {
   private initSVG(): any {
     // append a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    return d3.select(this.el.nativeElement)
-      .select('svg')
+    return d3.select( this.el.nativeElement.querySelector('.bar-chart-container') )
+      .append('svg')
       .attr('width', this.width)
       .attr('height', this.height + 30)
       .append('g')

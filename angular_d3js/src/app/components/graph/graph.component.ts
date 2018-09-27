@@ -10,11 +10,15 @@ export class GraphComponent implements OnInit {
 
   public title = 'Coût de chaque poste de charge';
   public parent: any [] = [];
+  public isData = false;
 
   constructor(private barChartService: BarChartService) { }
 
   ngOnInit() {
     this.parent = this.barChartService.getBarChartData();
+    if (this.parent.length > 0) {
+      this.isData = true;
+    }
   }
 
 }
